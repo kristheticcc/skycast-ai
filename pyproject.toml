@@ -1,0 +1,13 @@
+[project]
+name = "skycast-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gradio>=6.18.0",
+    "openai>=2.41.1",
+    "pillow>=12.2.0",
+    "python-dotenv>=1.2.2",
+    "requests>=2.34.2",
+]
