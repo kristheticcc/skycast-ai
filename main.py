@@ -15,7 +15,7 @@ if not api_key:
 # Openai client initialization
 openai = OpenAI()
 model_main = "gpt-4.1-mini"
-model_audio = "gpt-4.1-min-tts"
+model_audio = "gpt-4o-mini-tts"
 model_image = "gpt-image-1"
 
 # System message to guide assistant's behavior
@@ -26,8 +26,23 @@ If you do not know the answer, just say so.
 """
 
 # get_weather(): Returns the weather of a given city using an API
-def get_weather():
-    return 0
+def get_weather(city):
+
+    # step 1: City name -> coordinates
+
+    # Building the url for geocoding API to get the latitude and longitude of the city
+    geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
+    # HTTP get request to the url
+    geo_response = requests.get(geo_url).json()
+
+    lat = geo_response["results"][0]["latitude"]
+    lon = geo_response["results"][0]["longitude"]
+
+    # step 2: Coordinates -> weather
+    weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=fahrenheit"
+    weather_response = requests.get(weather_url).json()
+    return weather_response
+
 
 # artist(): Generates an image for the given city
 def artist(city):
@@ -40,7 +55,7 @@ def talker(message):
         voice = "coral",
         input = message
     )
-    with tempfile.NamedTemporaryFile(suffix = "mp3", delete = False) as f:
+    with tempfile.NamedTemporaryFile(suffix = ".mp3", delete = False) as f:
         f.write(response.content)
         return f.name
 
