@@ -5,6 +5,9 @@ import gradio as gr
 from dotenv import load_dotenv
 from openai import OpenAI
 import tempfile
+import base64
+from io import BytesIO
+from PIL import Image
 
 # Load environment variables
 load_dotenv(override=True)
@@ -46,10 +49,39 @@ def get_weather(city):
     current = weather_response["current"]
     return f"Weather for {city}: {current['temperature_2m']}°F, Weather code: {current['weather_code']}, Wind Speed: {current['wind_speed_10m']} mph, Humidity: {current['relative_humidity_2m']}%"
 
+# Description of get_weather function
+weather_function = {
+    "name": get_weather,
+    "description": "Get the current weather for a given city.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "city": {
+                "type": "string",
+                "description": "The city name.",
+            }
+        },
+        "required": ["city"],
+        "additionalProperties": False
+    }
+}
+
+
+# tools list
+tools = [{"type": "function", "function": "weather_function"}]
+
 
 # artist(): Generates an image for the given city
 def artist(city):
-    return 0
+    image_response = openai.images.generate(
+        model = model_image,
+        prompt = f"An image representing a vacation in city {city}, in an anime art style",
+        size = "1024x1024",
+        n = 1
+    )
+    image_base64 = image_response.data[0].b64_json
+    image_data = base64.b64decode(image_base64)
+    return Image.open(BytesIO(image_data))
 
 # talker(): Generates audio given a message
 def talker(message):
@@ -78,6 +110,9 @@ def build_ui():
 def main():
     print("Hello from skycast-ai!")
     print(get_weather("New York"))
+    image = artist("New York")
+    image.save("test.png")
+
 
 
 if __name__ == "__main__":
