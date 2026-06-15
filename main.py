@@ -41,7 +41,10 @@ def get_weather(city):
     # step 2: Coordinates -> weather
     weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=fahrenheit"
     weather_response = requests.get(weather_url).json()
-    return weather_response
+
+    # Formatting for readability
+    current = weather_response["current"]
+    return f"Weather for {city}: {current['temperature_2m']}°F, Weather code: {current['weather_code']}, Wind Speed: {current['wind_speed_10m']} mph, Humidity: {current['relative_humidity_2m']}%"
 
 
 # artist(): Generates an image for the given city
@@ -74,6 +77,7 @@ def build_ui():
 
 def main():
     print("Hello from skycast-ai!")
+    print(get_weather("New York"))
 
 
 if __name__ == "__main__":
