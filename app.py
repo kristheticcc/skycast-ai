@@ -26,11 +26,9 @@ def build_ui():
                     )
     return ui
 
-def main():
-    ui = build_ui()
-    ui.launch()
+
+ui = build_ui()
+ui.launch()
 
 
 
-if __name__ == "__main__":
-    main()

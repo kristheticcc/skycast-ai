@@ -1,7 +1,9 @@
 # Skycast AI 🌤️
 
 A multimodal AI weather assistant that provides real-time weather data, 
-voice responses, and AI-generated city images.
+voice responses, and AI-generated city images. It has been deployed on Hugging Face
+Spaces and can be accessed via the link below.
+### Live app: [Launch Skycast AI](https://huggingface.co/spaces/krishMakwana-0801/SkyCast-AI)
 
 ## Features
 - 🌍 Real-time weather via Open-Meteo API (no API key needed)
